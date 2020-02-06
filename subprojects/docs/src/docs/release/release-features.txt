@@ -1,3 +1,0 @@
- - Dependency checksum and signature verification
- - Documentation links in deprecation messages
- - Navigable Gradle sources for plugin developers in IDE

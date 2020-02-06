@@ -1,19 +1,11 @@
 {
     "acceptedApiChanges": [
         {
-            "type": "org.gradle.plugins.signing.signatory.pgp.PgpSignatoryProvider",
-            "member": "Class org.gradle.plugins.signing.signatory.pgp.PgpSignatoryProvider",
-            "acceptation": "Introduced a new internal API interface for bridging with the security subproject",
+            "type": "org.gradle.plugins.signing.SignOperation",
+            "member": "Method org.gradle.plugins.signing.SignOperation.toFileCollection(java.util.List)",
+            "acceptation": "Method is intended to be used only by this class",
             "changes": [
-                "org.gradle.plugins.signing.signatory.internal.ConfigurableSignatoryProvider"
-            ]
-        },
-        {
-            "type": "org.gradle.api.artifacts.repositories.RepositoryContentDescriptor",
-            "member": "Class org.gradle.api.artifacts.repositories.RepositoryContentDescriptor",
-            "acceptation": "A new super interface has been introduced but old methods preserved on this one",
-            "changes": [
-                "org.gradle.api.artifacts.repositories.InclusiveRepositoryContentDescriptor"
+                "Abstract method has been added to this class"
             ]
         }
     ]

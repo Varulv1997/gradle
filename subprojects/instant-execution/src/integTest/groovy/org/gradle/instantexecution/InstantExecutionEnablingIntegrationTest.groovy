@@ -17,6 +17,9 @@
 package org.gradle.instantexecution
 
 import org.gradle.integtests.fixtures.executer.AbstractGradleExecuter
+import org.gradle.integtests.fixtures.executer.GradleContextualExecuter
+
+import javax.annotation.Nullable
 
 
 class InstantExecutionEnablingIntegrationTest extends AbstractInstantExecutionIntegrationTest {
@@ -51,16 +54,18 @@ class InstantExecutionEnablingIntegrationTest extends AbstractInstantExecutionIn
 
         cleanup:
         AbstractGradleExecuter.doNotPropagateSystemProperty(SystemProperties.isEnabled)
-        if (previousProp != null) {
-            System.setProperty(SystemProperties.isEnabled, previousProp)
-        } else {
-            System.clearProperty(SystemProperties.isEnabled)
-        }
+        setOrClearProperty(SystemProperties.isEnabled, previousProp)
     }
 
     def "can enable instant execution from gradle.properties"() {
 
-        given:
+        setup:
+        def previousProp = System.getProperty(SystemProperties.isEnabled)
+        if (GradleContextualExecuter.isEmbedded()) {
+            System.clearProperty(SystemProperties.isEnabled)
+        }
+
+        and:
         file('gradle.properties') << """
             systemProp.${SystemProperties.isEnabled}=true
         """
@@ -73,5 +78,16 @@ class InstantExecutionEnablingIntegrationTest extends AbstractInstantExecutionIn
 
         then: 'instant execution is enabled'
         fixture.assertStateStored()
+
+        cleanup:
+        setOrClearProperty(SystemProperties.isEnabled, previousProp)
+    }
+
+    private static void setOrClearProperty(String name, @Nullable String value) {
+        if (value != null) {
+            System.setProperty(name, value)
+        } else {
+            System.clearProperty(name)
+        }
     }
 }
