@@ -18,6 +18,7 @@ package org.gradle.api.plugins.quality.internal
 
 import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
+import org.gradle.api.internal.project.ant.AntLoggingAdapter
 import org.gradle.api.internal.project.ant.BasicAntBuilder
 import org.gradle.api.specs.Spec
 import org.gradle.internal.Cast
@@ -41,6 +42,8 @@ abstract class PmdAction implements WorkAction<PmdParameters> {
         def classpath = parameters.classpath.filter(new FileExistFilter())
         def incrementalAnalysis = parameters.incrementalAnalysis.get()
         def ant = new BasicAntBuilder()
+        ant.getProject().removeBuildListener(ant.getProject().getBuildListeners().get(0));
+        ant.getProject().addBuildListener(new AntLoggingAdapter())
 
         // PMD uses java.class.path to determine it's implementation classpath for incremental analysis
         // Since we run PMD inside a Gradle daemon, this can pull in all of Gradle's runtime.

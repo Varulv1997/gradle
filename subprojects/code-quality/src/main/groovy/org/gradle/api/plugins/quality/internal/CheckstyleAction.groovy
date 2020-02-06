@@ -18,6 +18,7 @@ package org.gradle.api.plugins.quality.internal
 
 import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
+import org.gradle.api.internal.project.ant.AntLoggingAdapter
 import org.gradle.api.internal.project.ant.BasicAntBuilder
 import org.gradle.api.plugins.quality.Checkstyle
 import org.gradle.internal.logging.ConsoleRenderer
@@ -49,6 +50,8 @@ abstract class CheckstyleAction implements WorkAction<CheckstyleParameters> {
         def htmlDestination = parameters.htmlReportFile.getAsFile().getOrNull()
 
         def ant = new BasicAntBuilder()
+        ant.getProject().removeBuildListener(ant.getProject().getBuildListeners().get(0));
+        ant.getProject().addBuildListener(new AntLoggingAdapter())
 
         try {
             try {
